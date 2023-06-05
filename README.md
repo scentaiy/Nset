@@ -10,9 +10,10 @@
 
 ## API
 ```bash
+#swagger
 PORT = 3009
 MONGO_URL = 'mongodb://127.0.0.1:27017/worktestxxx'
-#swagger
+```
 
 
 1. ออกแบบระบบร้านขายหนังสือ โดยมี Feature ดังนี้
