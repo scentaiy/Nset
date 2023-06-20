@@ -20,6 +20,10 @@ export class OrderService {
   async findoerderbyid(id: string) {    
     return this.ordersModel.findOne({_id: id}).lean();
   }
+
+  async findoerderbyid1(id: string) { 
+    return this.ordersModel.find({_id: id}).sort({price:'desc',amount:1,id:1}).lean();
+  }
   
   async findreportoerder() {    
     return this.ordersModel.aggregate(
@@ -56,13 +60,69 @@ export class OrderService {
           $unwind: "$data",
         },
         {
-          $sort: {
-            'data.bookname': 1,
-          }
+          $sort: ({
+            'data.sumAmout': -1  ,'data.sumPrice': -1  /* , 'adddate': 1 */})
         },
+/*         {
+          $sort: {
+            'data.sumAmout': 1 , 
+          },
+        },  */
       ]
     );
   }
+/// 
+/* async findreportoerdergroup() {    
+  //return this.ordersModel.find().sort({booktype:1,price:1,amount:1}).lean();
+  return this.ordersModel.aggregate(
+    [
+      {
+        $unwind: "$books"
+      },
+      {
+        $group: {
+          _id: {
+            bookname: "$books.booktype"
+          },
+          
+          "sumPrice": {
+            $sum: "$books.booktotal"
+          }
+          ,"sumAmout": {
+            $sum: "$books.amout"  
+          }
+         
+        }
+      },
+      {
+        "$group": { 
+          "_id": 0,
+          "data": {
+            $addToSet: {
+              "bookname": "$_id.bookname",
+              "sumPrice": "$sumPrice",
+              "sumAmout": "$sumAmout"
+            }
+          },
+        },
+      },
+      {
+        $unwind: "$data",
+      },
+      {
+        $sort: ({
+          'sumAmout': 1 , 'adddate': 1})
+      },
+    ]
+  );
+} */
+
+async findreportorderlast(customername:string) {  
+  return this.ordersModel.findOne({ customername :customername
+  })
+  .sort({createdAt:'desc'})
+  .lean();
+} 
 
   async removeorder(id: string) {
     return this.ordersModel.remove({_id: new Types.ObjectId(id)});

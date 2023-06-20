@@ -7,8 +7,10 @@ import createUserEntity from './entities/create-user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { encodePassword } from '../auth/bcrypt/bcrypt';
 import { updateUserEntity } from './entities/update-user.entity';
-//
-//
+import { UpdatePasswordDto } from './dto/update-password.dto'; 
+import { updatepasswordEntity } from './entities/update-password.entity';
+import { BanUserDto } from './dto/ban-user.dto';
+import { banUserEntity } from './entities/ban-user.entity';
 
 @ApiTags('Users')
 @Controller('Users')
@@ -16,7 +18,6 @@ export class UsersController {
   constructor(
     private usersService: UsersService
     ) {}
-
   @Post('adduser')
   @ApiResponse({
     status: 200,
@@ -39,6 +40,7 @@ export class UsersController {
     return this.usersService.findalluser();
   }
 
+
   @Get('getnewuser')
   @ApiBearerAuth('defaultBearerAuth')
   @UseGuards(JwtAuthGuard)
@@ -52,7 +54,19 @@ export class UsersController {
   findoneuser(@Param('name') name: string) {
     return this.usersService.findoneuser(name);
   }
-//
+
+  @Put('banuserby:id')
+  @ApiBearerAuth('defaultBearerAuth')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: banUserEntity,
+  })
+  banuser(@Param('id') id: string, @Body() banUserDto: BanUserDto) {
+    return this.usersService.banuser(id, banUserDto);
+  }
+  
   @Put('edituserby:id')
   @ApiBearerAuth('defaultBearerAuth')
   @UseGuards(JwtAuthGuard)
@@ -66,6 +80,20 @@ export class UsersController {
     const updateUser = { ...updateUserDto, password };
     return this.usersService.updateuser(id, updateUser);
   }
+
+  @Put('editpasswordby:id')
+  @ApiBearerAuth('defaultBearerAuth')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'Success',
+    type: updatepasswordEntity,
+  })
+  updatepassword(@Param('id') id: string, @Body() updatePasswordDto: UpdatePasswordDto) {
+    const password = encodePassword(updatePasswordDto.password);
+    const updatePassword = { ...updatePasswordDto, password };
+    return this.usersService.updatepassword(id, updatePassword );
+  }
   
   @Delete('deleteuser:id')
   @ApiBearerAuth('defaultBearerAuth')
@@ -73,4 +101,5 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.removeuser(id);
   }
+
 }

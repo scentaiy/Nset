@@ -40,11 +40,21 @@ export class BooksController {
     return this.booksService.findallbooks();
   }
 
+  //
+
   @Get('getonebookby:id')
   @ApiBearerAuth('defaultBearerAuth')
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.booksService.findonebookbyid(id);
+  }
+
+  // แสดงข้อมูลตามหมวดหมู่
+  @Get('getgroupbookby:booktype')
+  @ApiBearerAuth('defaultBearerAuth')
+  @UseGuards(JwtAuthGuard)
+  findgroupbook(@Param('booktype') booktype : string) {
+    return this.booksService.findgroupbook(booktype);
   }
 
   @Put('editbookby:id')

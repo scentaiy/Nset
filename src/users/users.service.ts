@@ -5,8 +5,13 @@ import { Users, UsersDocument } from 'src/users/schema/users.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdateUsercoinDto } from '../order/dto/update-usercoin.dto';
-//
-import { updateUserEntity } from './entities/update-user.entity';
+import {updateUserEntity } from './entities/update-user.entity';
+import { banUserEntity } from './entities/ban-user.entity';
+import { BanUserDto } from './dto/ban-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
+import { updatepasswordEntity } from './entities/update-password.entity';
+import { Pagination } from '@forlagshuset/nestjs-mongoose-paginate';
+
 
 @Injectable()
 export class UsersService {
@@ -23,6 +28,10 @@ export class UsersService {
   async findoneuser(name: string) {
     return this.usersModel.findOne({ $or:[ {username: name}, {fristname: name}, {lastname: name} ]}).lean();
   }
+//pagination findoneusertest
+async findoneusertest() {
+  return this.usersModel.findOne({ $or:[ {username: name}, {fristname: name}, {lastname: name} ]}).lean();
+}
 
   async findnewuser() {
     const start = new Date().setHours(0, 0, 0, 0);
@@ -39,7 +48,13 @@ export class UsersService {
     return this.usersModel.updateOne({_id: new Types.ObjectId(id)}, {$set: updateUserDto}).lean();
   }
 
-//
+  async updatepassword(id: string, UpdatpasswordDto: UpdatePasswordDto): Promise<Users> {
+    return this.usersModel.updateOne({_id: new Types.ObjectId(id)}, {$set: UpdatpasswordDto}).lean();
+  }
+
+  async banuser(id: string, banUserDto: BanUserDto): Promise<banUserEntity> {
+    return this.usersModel.updateOne({_id: new Types.ObjectId(id)}, {$set: banUserDto}).lean();
+  }
 
   async updateusercoin(id: string, updateUsercoinDto: UpdateUsercoinDto): Promise<updateUserEntity>  {
     return this.usersModel.updateOne({_id: new Types.ObjectId(id)}, {$set: updateUsercoinDto}).lean();
@@ -52,4 +67,6 @@ export class UsersService {
   async findonegetuser(username: string) {
     return this.usersModel.findOne({ username }).lean();
   }
+
+
 }

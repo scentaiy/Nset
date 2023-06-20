@@ -24,6 +24,11 @@ export class BooksService {
     
     
   }
+//แสดงเป็นกลุ่ม
+
+  async findgroupbook( booktype: string ) {
+    return this.booksModel.find({ booktype : booktype  }).sort({price:1,amount:1}).lean();
+  }
 
   async updateonebook(id: string, updateBookDto: UpdateBookDto)  {
     return this.booksModel.updateOne({_id: new Types.ObjectId(id)}, {$set:updateBookDto});

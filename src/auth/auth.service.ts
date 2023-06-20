@@ -32,7 +32,7 @@ export class AuthService {
             await this.cacheManager.set(`${ user.username}-auth-fail`,1, { ttl: 120 });
           }
           else{
-            await this.cacheManager.set(`${ user.username}-auth-fail`,value+1, { ttl: 30 });
+            await this.cacheManager.set(`${ user.username}-auth-fail`,value+1, { ttl: 10 });
           }
           return null;
         }

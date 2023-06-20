@@ -95,12 +95,29 @@ export class OrderController {
     return this.orderService.findoerderbyid(id);
   }
 
+  //จัดอันดับ
+  @Get('getallorder1')
+  @ApiBearerAuth('defaultBearerAuth')
+  @UseGuards(JwtAuthGuard)
+  async findoneorderbyid1(@Param('id') id: string) {
+    return this.orderService.findoerderbyid1(id);
+  }
+
   @Get('reportorder')
   @ApiBearerAuth('defaultBearerAuth')
   @UseGuards(JwtAuthGuard)
   async reportordersgroupbybookname() {
     return this.orderService.findreportoerder();
   }
+
+
+  @Get('reportorderlast:customername')
+  @ApiBearerAuth('defaultBearerAuth')
+  @UseGuards(JwtAuthGuard)
+  async reportorderlast(@Param('customername') customername: string) {
+    return this.orderService.findreportorderlast(customername);
+  }
+  
 
   @Delete('deleteorderby:id')
   @ApiBearerAuth('defaultBearerAuth')
